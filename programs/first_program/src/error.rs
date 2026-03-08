@@ -10,4 +10,6 @@ pub enum CounterError {
     Forbidden,
     #[msg("Arithmetic error")]
     Arithmetic,
+    #[msg("Invalid admin account provided")]
+    InvalidAdmin,
 }
