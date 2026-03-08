@@ -26,6 +26,12 @@ pub struct Modify<'info> {
     pub system_program: Program<'info, System>,
 }
 
+#[event]
+pub struct IncrementLog {
+    pub incrementer: Pubkey,
+    pub previous_value: u64,
+}
+
 pub fn increment_handler(ctx: Context<Modify>) -> Result<()> {
     require_keys_eq!(
         ctx.accounts.counter.authority,
@@ -37,6 +43,12 @@ pub fn increment_handler(ctx: Context<Modify>) -> Result<()> {
         1,
         CounterError::NotInitialized
     );
+
+    msg!("hello world");
+    emit!(IncrementLog {
+        incrementer: ctx.accounts.signer.key(),
+        previous_value: ctx.accounts.counter.value
+    });
 
     let cpi_context = CpiContext::new(
         ctx.accounts.system_program.to_account_info(),
